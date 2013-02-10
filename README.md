@@ -18,7 +18,7 @@ compiled from `helloworld.c`.
 
 ## Using TinyELF
 
-    $ gcc helloworld.c -o helloworld-c
+    $ gcc helloworld.c -nostdlib -o helloworld-c
     $ objcopy -O binary -j .text helloworld-c helloworld-bin
     $ cat tinyelf helloworld-bin > helloworld
     $ chmod +x helloworld
