@@ -1,0 +1,49 @@
+# TinyELF binary definition | Spencer Tipping
+# Licensed under the terms of the MIT source code license
+
+:[::base-address = 0x400000]    # standard ELF virtual offset
+
+::elf-header-begin
+::elf-ehdr-begin                # e-ident array
+  ::elf-e-ident    7f 'ELF      # ELF magic
+  ::elf-ei-class   02           # 64-bit binary
+  ::elf-ei-data    01           # Two's complement little-endian
+  ::elf-ei-version 01           # Current ELF version
+  ::elf-ei-osabi   00           # System V UNIX ABI
+
+  ::elf-ei-abiversion 00        # ABI version
+  ::elf-ei-padding /7/00        # padding; end of e-ident
+
+  ::elf-e-type      :2[L 2]     # Executable file
+  ::elf-e-machine   :2[L 0x3e]  # x86-64
+  ::elf-e-version   :4[L 1]     # current version
+
+  ::elf-e-entry     :8[L :base-address + :elf-header-end - :elf-header-begin]
+
+  ::elf-e-phoff     :8[L :phdr-begin]
+  ::elf-e-shoff     :8[L 0]     # no section headers
+
+  ::elf-e-flags     :4[L 0]
+  ::elf-e-ehsize    :2[L :elf-ehdr-end - :elf-ehdr-begin]
+  ::elf-e-phentsize :2[L :phdr-end     - :phdr-begin]
+  ::elf-e-phnum     :2[L 1]
+
+  ::elf-e-shentsize :2[L 0]
+  ::elf-e-shnum     :2[L 0]
+  ::elf-e-shstrndx  :2[L 0]
+::elf-ehdr-end
+
+# Single executable section, which begins at the end of this header. It
+# continues for the next 64MB after that, which shouldn't actually use any
+# memory until someone page-faults it.
+::phdr-begin
+  ::phdr-p-type   :4[L 1]         # PT_LOAD
+  ::phdr-p-flags  :4[L 4 | 2 | 1] # PT_R | PT_W | PT_X
+  ::phdr-p-offset :8[L 0]
+  ::phdr-p-vaddr  :8[L 0x400000]
+  ::phdr-p-paddr  :8[L 0]
+  ::phdr-p-filesz :8[L 64 * 1048576]
+  ::phdr-p-memsz  :8[L 64 * 1048576]
+  ::phdr-p-align  :8[L 0x1000]
+::phdr-end
+::elf-header-end
