@@ -7,10 +7,9 @@ for x86-64:
     hello world
     $ ./helloworld-c            # compiled with gcc
     hello world
-    $ wc -c helloworld-c helloworld
+    $ wc -c helloworld-c helloworld | grep -v total
     1733 helloworld-c
-     329 helloworld
-    2062 total
+     333 helloworld
     $
 
 The machine code for `helloworld` and `helloworld-c` is identical; each was

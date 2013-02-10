@@ -17,7 +17,7 @@ void _start() {
   /* Must be declared as a locally-allocated variable. If we made it a pointer
    * to a global (e.g. const char *message = "hello world\n"), then the text
    * "hello world" would be lost during the objcopy conversion. */
-  const char message[12] = "hello world\n";
+  const char message[] = "hello world\n";
   syscall(__NR_write, 1, message, 12, 0, 0, 0);
   syscall(__NR_exit, 0, 0, 0, 0, 0, 0);
 }
