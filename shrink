@@ -1,0 +1,9 @@
+#!/bin/bash
+# Shrinks a regular ELF into a TinyELF. This will produce a segfaulting
+# executable unless the original ELF was compiled with TinyELF shrinkage in
+# mind.
+
+shrunk=$(mktemp "${TMPDIR:-/tmp}/shrink-XXXXXXXX")
+objcopy -O binary -j .text "$1" >(cat ${TINYELF:-./tinyelf} - > "$shrunk")
+chmod +x "$shrunk"
+mv "$shrunk" "$1"

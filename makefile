@@ -1,7 +1,7 @@
 # Disable implicit build rules (otherwise helloworld < helloworld.c via $(CC))
 .SUFFIXES:
 all: tinyelf examples
-examples: helloworld
+examples: helloworld helloworld-c
 
 .PHONY: clean
 clean:
