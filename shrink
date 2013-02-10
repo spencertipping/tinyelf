@@ -3,7 +3,13 @@
 # executable unless the original ELF was compiled with TinyELF shrinkage in
 # mind.
 
+if [[ ! -f "${TINYELF:=./tinyelf}" ]]; then
+  echo "$0: error: must set TINYELF to point to the tinyelf binary file"
+  echo "try export TINYELF=/path/to/tinyelf"
+  exit 1
+fi
+
 shrunk=$(mktemp "${TMPDIR:-/tmp}/shrink-XXXXXXXX")
-objcopy -O binary -j .text "$1" >(cat ${TINYELF:-./tinyelf} - > "$shrunk")
+objcopy -O binary -j .text "$1" >(cat "$TINYELF" - > "$shrunk")
 chmod +x "$shrunk"
 mv "$shrunk" "$1"
